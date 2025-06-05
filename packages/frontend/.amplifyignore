@@ -1,0 +1,16 @@
+amplify/mock-data
+amplify/data/resource.ts.backup
+amplify/.config
+node_modules
+.env
+.env.local
+.env.production.local
+.env.development.local
+*.log
+.DS_Store
+coverage/
+.nyc_output/
+*.tgz
+*.tar.gz
+.vscode/
+.idea/ 
