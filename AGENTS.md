@@ -10,7 +10,7 @@ This repository is a PNPM based monorepo. It contains:
 1. Install dependencies from the repo root: `pnpm install`.
 2. Work in the appropriate package:
    - Frontend: use `pnpm run frontend:dev` for local development.
-   - Backend: use `pnpm run backend:deploy` to deploy the CDK stack.
+   - Backend: run `npx ampx pipeline-deploy --branch <branch> --app-id <appId>` to deploy the Amplify Gen&nbsp;2 stack.
 3. Lint all code before committing:
    - Frontend: `pnpm run frontend:lint`.
    - Backend linting is not yet configured.

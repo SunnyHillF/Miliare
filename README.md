@@ -1,6 +1,6 @@
 ## AWS Amplify React+Vite Starter Template
 
-This repository provides a starter template for creating applications using React+Vite and AWS Amplify, emphasizing easy setup for authentication, API, and database capabilities.
+This repository provides a starter template for creating applications using React+Vite and AWS Amplify **Gen&nbsp;2**, emphasizing easy setup for authentication, API, and database capabilities.
 
 ## Overview
 
@@ -14,7 +14,14 @@ This template equips you with a foundational React application integrated with A
 
 ## Deploying to AWS
 
-For detailed instructions on deploying your application, refer to the [deployment section](https://docs.amplify.aws/react/start/quickstart/#deploy-a-fullstack-app-to-aws) of our documentation.
+To deploy using Amplify Gen&nbsp;2, run the backend pipeline deploy command from the repository root:
+
+```bash
+npx ampx pipeline-deploy --branch <branch> --app-id <appId>
+```
+
+This will provision the backend defined in `packages/frontend/amplify` and build the frontend located in `packages/frontend`.
+Refer to the [deployment section](https://docs.amplify.aws/gen2/deploy/pipelines/) for more details.
 
 ## Security
 

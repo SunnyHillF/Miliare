@@ -8,8 +8,12 @@ This codebase provides a clean starting point with established patterns and conf
 
 ## Usage
 1. Clone or copy this directory to use as a starting point
-2. Install dependencies using `npm install` or `pnpm install`
-3. Follow the development instructions in the parent repository
+2. Install dependencies using `pnpm install` from the repository root
+3. Deploy the backend with Amplify Gen&nbsp;2:
+   ```bash
+   npx ampx pipeline-deploy --branch <branch> --app-id <appId>
+   ```
+4. Follow the development instructions in the parent repository
 
 ## Notes
 - This reference implementation has been stripped of all version control metadata to serve as clean starter code
