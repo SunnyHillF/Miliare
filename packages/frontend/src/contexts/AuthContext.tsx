@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { signIn, signUp, signOut, getCurrentUser, fetchAuthSession } from 'aws-amplify/auth';
 /* eslint react-refresh/only-export-components: 0 */
 
 type User = {
@@ -26,63 +27,86 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check if user is stored in localStorage
-    const storedUser = localStorage.getItem('mrn_user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-    setIsLoading(false);
+    checkAuthStatus();
   }, []);
 
-  const login = async (email: string, password: string) => {
-    // In a real app, this would make an API call to authenticate
-    setIsLoading(true);
-    // Simulating an API call with a timeout
-    await new Promise(resolve => setTimeout(resolve, 1000));
+  const checkAuthStatus = async () => {
+    try {
+      const currentUser = await getCurrentUser();
+      const session = await fetchAuthSession();
       
-      // For demo purposes, just check if email contains "@" and password is not empty
-      if (!email.includes('@') || !password) {
-        throw new Error('Invalid credentials');
+      if (currentUser && session.tokens) {
+        // Convert Amplify user to our User type
+        const userData: User = {
+          id: currentUser.userId,
+          name: currentUser.username,
+          email: currentUser.signInDetails?.loginId || '',
+          company: 'WFG', // Default for now, could come from user attributes
+          uplineSMD: undefined, // Could come from user attributes
+          uplineEVC: undefined  // Could come from user attributes
+        };
+        setUser(userData);
       }
+    } catch (error) {
+      // User is not authenticated
+      setUser(null);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const login = async (email: string, password: string) => {
+    setIsLoading(true);
+    try {
+      const { isSignedIn } = await signIn({
+        username: email,
+        password: password,
+      });
       
-      // Mock user data
-      const userData: User = {
-        id: '1',
-        name: email.split('@')[0],
-        email,
-        company: 'WFG',
-        uplineSMD: 'John Doe',
-        uplineEVC: 'Jane Smith'
-      };
-      
-      setUser(userData);
-      localStorage.setItem('mrn_user', JSON.stringify(userData));
-    setIsLoading(false);
+      if (isSignedIn) {
+        await checkAuthStatus();
+      }
+    } catch (error) {
+      setIsLoading(false);
+      throw error;
+    }
   };
 
   const register = async (userData: Omit<User, 'id'> & { password: string }) => {
     setIsLoading(true);
-    // Simulating an API call with a timeout
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    try {
+      const { isSignUpComplete } = await signUp({
+        username: userData.email,
+        password: userData.password,
+        options: {
+          userAttributes: {
+            email: userData.email,
+            name: userData.name,
+            // You can add custom attributes for company, upline, etc.
+            'custom:company': userData.company,
+            'custom:uplineSMD': userData.uplineSMD || '',
+            'custom:uplineEVC': userData.uplineEVC || '',
+          },
+        },
+      });
       
-      // Mock registration
-      const registeredUser: User = {
-        id: Math.random().toString(36).substring(2, 9),
-        name: userData.name,
-        email: userData.email,
-        company: userData.company,
-        uplineSMD: userData.uplineSMD,
-        uplineEVC: userData.uplineEVC
-      };
-      
-      setUser(registeredUser);
-      localStorage.setItem('mrn_user', JSON.stringify(registeredUser));
-    setIsLoading(false);
+      if (isSignUpComplete) {
+        // Auto-sign in after successful registration
+        await login(userData.email, userData.password);
+      }
+    } catch (error) {
+      setIsLoading(false);
+      throw error;
+    }
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem('mrn_user');
+  const logout = async () => {
+    try {
+      await signOut();
+      setUser(null);
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
   };
 
   return (
