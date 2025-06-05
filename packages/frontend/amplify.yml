@@ -28,13 +28,6 @@ applications:
             - cd packages/frontend
             - pnpm run build
       artifacts:
-        baseDirectory: packages/frontend/dist
+        baseDirectory: dist
         files:
           - '**/*'
-      cache:
-        paths:
-          - node_modules/.pnpm/**/*
-          - node_modules/@types/**/*
-          - node_modules/react/**/*
-          - node_modules/react-dom/**/*
-          - node_modules/typescript/**/*
