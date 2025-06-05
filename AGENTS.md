@@ -27,3 +27,14 @@ review these files first.
 - This project uses Node 22+ and pnpm 10.11.1.
 - A separate `AGENTS.md` exists in `packages/backend/backend_design_docs` with detailed backend design and maintenance notes.
 - Keep this guide current as the project evolves.
+
+## Phase 1 Progress
+The prototype from `app_design/proto-mrn` has been copied into `packages/frontend`.
+Tailwind, React Router and related dependencies are installed.  Basic login and
+registration pages now render using a local `AuthContext`.
+
+### Remaining Phase 1 Tasks
+1. Hook the authentication flows to Amplify Cognito instead of the local mock.
+2. Replace the sample Todo data model with schemas from `Design_specs.md` using Amplify DataStore.
+3. Configure Amplify environments for dev and QA.
+4. Set up Amplify Console for automatic deployments.
