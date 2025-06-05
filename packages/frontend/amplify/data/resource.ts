@@ -20,6 +20,8 @@ const schema = a.schema({
       uplineSMD: a.string(), // Required if company is WFG
       bankInfoDocument: a.string(), // DocuSign envelope ID
       taxDocument: a.string(), // DocuSign envelope ID
+      referrals: a.hasMany("Referral", "userId"),
+      payments: a.hasMany("Payment", "userId"),
     })
     .authorization((allow) => [
       allow.owner(),
@@ -43,6 +45,7 @@ const schema = a.schema({
       mrnPercentage: a.float(),
       contractorPercentage: a.float(),
       trainingLinks: a.string().array(),
+      referrals: a.hasMany("Referral", "partnerId"),
     })
     .authorization((allow) => [
       allow.authenticated().to(["read"]),
@@ -73,6 +76,7 @@ const schema = a.schema({
       notes: a.string(),
       paidAt: a.datetime(),
       partner: a.belongsTo("Partner", "partnerId"),
+      payments: a.hasMany("Payment", "referralId"),
     })
     .authorization((allow) => [
       allow.owner().to(["create", "read", "update", "delete"]),
