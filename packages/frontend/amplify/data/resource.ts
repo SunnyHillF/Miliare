@@ -20,8 +20,8 @@ const schema = a.schema({
       uplineSMD: a.string(), // Required if company is WFG
       bankInfoDocument: a.string(), // DocuSign envelope ID
       taxDocument: a.string(), // DocuSign envelope ID
-      referrals: a.hasMany("Referral", "userId"),
-      payments: a.hasMany("Payment", "userId"),
+      referrals: a.hasMany("Referral", "userProfileId"),
+      payments: a.hasMany("Payment", "userProfileId"),
     })
     .authorization((allow) => [
       allow.owner(),
@@ -56,7 +56,7 @@ const schema = a.schema({
   Referral: a
     .model({
       id: a.id(),
-      userId: a.string().required(), // References UserProfile
+      userProfileId: a.id().required(), // References UserProfile
       partnerId: a.id().required(), // References Partner
       leadId: a.string().required(),
       clientName: a.string().required(),
@@ -75,6 +75,7 @@ const schema = a.schema({
       paymentStatus: a.enum(["PENDING", "PROCESSED", "FAILED"]),
       notes: a.string(),
       paidAt: a.datetime(),
+      userProfile: a.belongsTo("UserProfile", "userProfileId"),
       partner: a.belongsTo("Partner", "partnerId"),
       payments: a.hasMany("Payment", "referralId"),
     })
@@ -87,7 +88,7 @@ const schema = a.schema({
   Payment: a
     .model({
       id: a.id(),
-      userId: a.string().required(), // References UserProfile
+      userProfileId: a.id().required(), // References UserProfile
       referralId: a.id(), // References Referral
       amount: a.integer().required(), // Amount in cents
       type: a.enum(["COMMISSION", "BONUS_POOL", "UPLINE"]),
@@ -99,6 +100,7 @@ const schema = a.schema({
       routingNumber: a.string(),
       accountType: a.string(),
       notes: a.string(),
+      userProfile: a.belongsTo("UserProfile", "userProfileId"),
       referral: a.belongsTo("Referral", "referralId"),
     })
     .authorization((allow) => [
