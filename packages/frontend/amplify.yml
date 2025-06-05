@@ -3,23 +3,27 @@ backend:
   phases:
     preBuild:
       commands:
-        - echo "Installing pnpm"
-        - npm install -g pnpm@latest
-        - echo "Installing dependencies"
-        - pnpm install --frozen-lockfile
+        - nvm use 22
+        - corepack enable
+        - corepack prepare pnpm@10.11.0 --activate
+        - echo "Installing workspace dependencies from root"
+        - cd ../.. && pnpm install --frozen-lockfile --prefer-offline
     build:
       commands:
+        - cd packages/frontend
         - npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID
 frontend:
   phases:
     preBuild:
       commands:
-        - echo "Installing pnpm"
-        - npm install -g pnpm@latest
-        - echo "Installing dependencies"
-        - pnpm install --frozen-lockfile
+        - nvm use 22
+        - corepack enable
+        - corepack prepare pnpm@10.11.0 --activate
+        - echo "Installing workspace dependencies from root"
+        - cd ../.. && pnpm install --frozen-lockfile --prefer-offline
     build:
       commands:
+        - cd packages/frontend
         - pnpm run build
   artifacts:
     baseDirectory: dist
@@ -28,3 +32,5 @@ frontend:
   cache:
     paths:
       - node_modules/**/*
+      - ../../node_modules/**/*
+      - amplify/.config/**/*
