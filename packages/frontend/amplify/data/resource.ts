@@ -18,13 +18,18 @@ const schema = a.schema({
       company: a.string(),
       uplineEVC: a.string(), // Required if company is WFG
       uplineSMD: a.string(), // Required if company is WFG
+      teamLeadId: a.id(), // References the team lead's UserProfile ID
       bankInfoDocument: a.string(), // DocuSign envelope ID
       taxDocument: a.string(), // DocuSign envelope ID
       referrals: a.hasMany("Referral", "userProfileId"),
       payments: a.hasMany("Payment", "userProfileId"),
+      teamLead: a.belongsTo("UserProfile", "teamLeadId"),
+      teamMembers: a.hasMany("UserProfile", "teamLeadId"),
     })
     .authorization((allow) => [
-      allow.publicApiKey()
+      allow.owner(),
+      allow.groups(["admins"]),
+      allow.groups(["team_lead"]).to(["read"])
     ]),
 
   // Strategic Partners model
@@ -47,7 +52,9 @@ const schema = a.schema({
       referrals: a.hasMany("Referral", "partnerId"),
     })
     .authorization((allow) => [
-      allow.publicApiKey()
+      allow.authenticated().to(["read"]),
+      allow.groups(["admins"]),
+      allow.groups(["team_lead"]).to(["read"])
     ]),
 
   // Referrals model - tracks leads sent to partners
@@ -78,7 +85,9 @@ const schema = a.schema({
       payments: a.hasMany("Payment", "referralId"),
     })
     .authorization((allow) => [
-      allow.publicApiKey()
+      allow.owner().to(["create", "read", "update", "delete"]),
+      allow.groups(["admins"]),
+      allow.groups(["team_lead"]).to(["read"])
     ]),
 
   // Payments model - monthly payouts
@@ -101,7 +110,27 @@ const schema = a.schema({
       referral: a.belongsTo("Referral", "referralId"),
     })
     .authorization((allow) => [
-      allow.publicApiKey()
+      allow.owner().to(["create", "read", "update", "delete"]),
+      allow.groups(["admins"]),
+      allow.groups(["team_lead"]).to(["read"])
+    ]),
+
+  // Team Performance Reports - aggregated data for team leads
+  TeamReport: a
+    .model({
+      id: a.id(),
+      teamLeadId: a.id().required(), // References UserProfile of team lead
+      period: a.string().required(), // YYYY-MM format
+      totalReferrals: a.integer().required(),
+      totalCommissions: a.integer().required(), // Amount in cents
+      totalPayments: a.integer().required(), // Amount in cents
+      teamMemberCount: a.integer().required(),
+      topPerformerId: a.id(), // References UserProfile of top performer
+      reportData: a.json(), // Detailed breakdown data
+    })
+    .authorization((allow) => [
+      allow.owner().to(["read"]),
+      allow.groups(["admins"])
     ]),
 });
 
@@ -110,10 +139,7 @@ export type Schema = ClientSchema<typeof schema>;
 export const data = defineData({
   schema,
   authorizationModes: {
-    defaultAuthorizationMode: "apiKey",
-    apiKeyAuthorizationMode: {
-      expiresInDays: 30,
-    },
+    defaultAuthorizationMode: "userPool",
   },
 });
 
