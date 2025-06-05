@@ -7,11 +7,100 @@ specifies that any user authenticated via an API key can "create", "read",
 "update", and "delete" any "Todo" records.
 =========================================================================*/
 const schema = a.schema({
-  Todo: a
+  // User Profile model - extends Cognito user data
+  UserProfile: a
     .model({
-      content: a.string(),
+      id: a.id(), // Matches Cognito sub
+      name: a.string().required(),
+      email: a.email().required(),
+      phone: a.string(),
+      address: a.string(),
+      company: a.string(),
+      uplineEVC: a.string(), // Required if company is WFG
+      uplineSMD: a.string(), // Required if company is WFG
+      bankInfoDocument: a.string(), // DocuSign envelope ID
+      taxDocument: a.string(), // DocuSign envelope ID
     })
-    .authorization((allow) => [allow.publicApiKey()]),
+    .authorization((allow) => [
+      allow.owner(),
+      allow.groups(["admins"])
+    ]),
+
+  // Strategic Partners model
+  Partner: a
+    .model({
+      id: a.id(),
+      name: a.string().required(),
+      contactEmail: a.email().required(),
+      website: a.url().required(),
+      status: a.enum(["ACTIVE", "INACTIVE"]),
+      description: a.string(),
+      // Compensation structure
+      agentPercentage: a.float(),
+      smdPercentage: a.float(),
+      evcPercentage: a.float(),
+      bonusPoolPercentage: a.float(),
+      mrnPercentage: a.float(),
+      contractorPercentage: a.float(),
+      trainingLinks: a.string().array(),
+    })
+    .authorization((allow) => [
+      allow.authenticated().to(["read"]),
+      allow.groups(["admins"])
+    ]),
+
+  // Referrals model - tracks leads sent to partners
+  Referral: a
+    .model({
+      id: a.id(),
+      userId: a.string().required(), // References UserProfile
+      partnerId: a.id().required(), // References Partner
+      leadId: a.string().required(),
+      clientName: a.string().required(),
+      status: a.enum(["IN_PROGRESS", "IN_REVIEW", "PAID", "REJECTED"]),
+      amount: a.integer().required(), // Amount in cents
+      uplineEVC: a.string(),
+      uplineSMD: a.string(),
+      // Commission distribution
+      agentAmount: a.integer(),
+      smdAmount: a.integer(),
+      evcAmount: a.integer(),
+      bonusPoolAmount: a.integer(),
+      mrnAmount: a.integer(),
+      contractorAmount: a.integer(),
+      partnerType: a.enum(["DIRECT_PAYMENT", "MRN_PAYMENT"]),
+      paymentStatus: a.enum(["PENDING", "PROCESSED", "FAILED"]),
+      notes: a.string(),
+      paidAt: a.datetime(),
+      partner: a.belongsTo("Partner", "partnerId"),
+    })
+    .authorization((allow) => [
+      allow.owner().to(["create", "read", "update", "delete"]),
+      allow.groups(["admins"])
+    ]),
+
+  // Payments model - monthly payouts
+  Payment: a
+    .model({
+      id: a.id(),
+      userId: a.string().required(), // References UserProfile
+      referralId: a.id(), // References Referral
+      amount: a.integer().required(), // Amount in cents
+      type: a.enum(["COMMISSION", "BONUS_POOL", "UPLINE"]),
+      status: a.enum(["PENDING", "PROCESSED", "FAILED"]),
+      period: a.string(), // YYYY-MM format
+      processedAt: a.datetime(),
+      // Bank account info (last 4 digits only)
+      accountNumber: a.string(),
+      routingNumber: a.string(),
+      accountType: a.string(),
+      notes: a.string(),
+      referral: a.belongsTo("Referral", "referralId"),
+    })
+    .authorization((allow) => [
+      allow.owner().to(["create", "read", "update", "delete"]),
+      allow.groups(["admins"])
+    ]),
 });
 
 export type Schema = ClientSchema<typeof schema>;
@@ -19,11 +108,7 @@ export type Schema = ClientSchema<typeof schema>;
 export const data = defineData({
   schema,
   authorizationModes: {
-    defaultAuthorizationMode: "apiKey",
-    // API Key is used for a.allow.public() rules
-    apiKeyAuthorizationMode: {
-      expiresInDays: 30,
-    },
+    defaultAuthorizationMode: "userPool",
   },
 });
 
