@@ -39,7 +39,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         // Convert Amplify user to our User type
         const userData: User = {
           id: currentUser.userId,
-          name: currentUser.username,
+          name: currentUser.username, // Will be populated from registration form
           email: currentUser.signInDetails?.loginId || '',
           company: 'WFG', // Default for now, could come from user attributes
           uplineSMD: undefined, // Could come from user attributes

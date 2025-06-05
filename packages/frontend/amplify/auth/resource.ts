@@ -14,8 +14,20 @@ export const auth = defineAuth({
       required: true,
       mutable: true,
     },
-    name: {
+    givenName: {
       required: true,
+      mutable: true,
+    },
+    familyName: {
+      required: true,
+      mutable: true,
+    },
+    phoneNumber: {
+      required: false,
+      mutable: true,
+    },
+    address: {
+      required: false,
       mutable: true,
     },
     // Custom attributes for Miliare business domain
