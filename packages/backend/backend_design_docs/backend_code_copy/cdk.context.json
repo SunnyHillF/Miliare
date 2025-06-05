@@ -1,0 +1,10 @@
+{
+  "hosted-zone:account=733226642200:domainName=miliarereferral.com:region=us-west-2": {
+    "Id": "/hostedzone/Z06213242VS6L891DGP31",
+    "Name": "miliarereferral.com."
+  },
+  "hosted-zone:account=733226642200:domainName=miliarereferral.com:region=us-east-1": {
+    "Id": "/hostedzone/Z06213242VS6L891DGP31",
+    "Name": "miliarereferral.com."
+  }
+}

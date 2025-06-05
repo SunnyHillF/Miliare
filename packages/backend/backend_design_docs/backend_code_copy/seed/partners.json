@@ -1,0 +1,105 @@
+[
+  {
+    "PK": "PARTNER#sunny-hill-financial",
+    "SK": "PROFILE#sunny-hill-financial",
+    "id": "sunny-hill-financial",
+    "name": "Sunny Hill Financial",
+    "description": "Financial planning and investment services for individuals and businesses.",
+    "contactEmail": "info@sunnyhill.example.com",
+    "website": "https://sunnyhill.example.com",
+    "status": "ACTIVE",
+    "trainingLinks": [
+      { "label": "Getting Started Video", "url": "#" },
+      { "label": "Referral Guide PDF", "url": "#" }
+    ],
+    "createdAt": "2023-01-01T00:00:00Z"
+  },
+  {
+    "PK": "PARTNER#prime-corporate-services",
+    "SK": "PROFILE#prime-corporate-services",
+    "id": "prime-corporate-services",
+    "name": "Prime Corporate Services",
+    "description": "Business entity formation, CPA, tax preparation, bookkeeping, estate planning, and corporate credit services.",
+    "contactEmail": "contact@primecorp.example.com",
+    "website": "https://primecorp.example.com",
+    "status": "ACTIVE",
+    "trainingLinks": [
+      { "label": "Partner Overview", "url": "#" },
+      { "label": "Compensation Structure", "url": "#" }
+    ],
+    "createdAt": "2023-01-02T00:00:00Z"
+  },
+  {
+    "PK": "PARTNER#anco-insurance",
+    "SK": "PROFILE#anco-insurance",
+    "id": "anco-insurance",
+    "name": "ANCO Insurance",
+    "description": "Employee benefits, business, and personal insurance solutions for Texas and all 50 states.",
+    "contactEmail": "partners@anco.example.com",
+    "website": "https://anco.example.com",
+    "status": "ACTIVE",
+    "trainingLinks": [
+      { "label": "Agent Training", "url": "#" },
+      { "label": "Marketing Materials", "url": "#" }
+    ],
+    "createdAt": "2023-01-03T00:00:00Z"
+  },
+  {
+    "PK": "PARTNER#weightless-financial",
+    "SK": "PROFILE#weightless-financial",
+    "id": "weightless-financial",
+    "name": "Weightless Financial",
+    "description": "Debt resolution and financial literacy programs.",
+    "contactEmail": "support@weightless.example.com",
+    "website": "https://weightlessfinancial.com",
+    "status": "ACTIVE",
+    "trainingLinks": [
+      { "label": "Overview", "url": "#" },
+      { "label": "Referral Process", "url": "#" }
+    ],
+    "createdAt": "2023-01-04T00:00:00Z"
+  },
+  {
+    "PK": "PARTNER#summit-business-syndicate",
+    "SK": "PROFILE#summit-business-syndicate",
+    "id": "summit-business-syndicate",
+    "name": "Summit Business Syndicate",
+    "description": "401k setup and management services for companies.",
+    "contactEmail": "info@summit.example.com",
+    "website": "https://summitsyndicate.example.com",
+    "status": "ACTIVE",
+    "trainingLinks": [
+      { "label": "Partner Brief", "url": "#" },
+      { "label": "Compensation Details", "url": "#" }
+    ],
+    "createdAt": "2023-01-05T00:00:00Z"
+  },
+  {
+    "PK": "PARTNER#wellness-for-the-workforce",
+    "SK": "PROFILE#wellness-for-the-workforce",
+    "id": "wellness-for-the-workforce",
+    "name": "Wellness for the Workforce",
+    "description": "Healthcare gap solutions for employers.",
+    "contactEmail": "hello@wftwf.example.com",
+    "website": "https://wellnessfortheworkforce.com",
+    "status": "ACTIVE",
+    "trainingLinks": [
+      { "label": "Program Overview", "url": "#" }
+    ],
+    "createdAt": "2023-01-06T00:00:00Z"
+  },
+  {
+    "PK": "PARTNER#impact-health-sharing",
+    "SK": "PROFILE#impact-health-sharing",
+    "id": "impact-health-sharing",
+    "name": "Impact Health Sharing",
+    "description": "Affordable alternative healthcare options.",
+    "contactEmail": "partners@impacthealth.example.com",
+    "website": "https://impacthealthsharing.com",
+    "status": "ACTIVE",
+    "trainingLinks": [
+      { "label": "Getting Started", "url": "#" }
+    ],
+    "createdAt": "2023-01-07T00:00:00Z"
+  }
+]

@@ -1,0 +1,46 @@
+[
+  {
+    "PK": "PAYMENT#pay1",
+    "SK": "METADATA#pay1",
+    "id": "pay1",
+    "userId": "user123",
+    "referralId": "ref1",
+    "amount": 125050,
+    "type": "COMMISSION",
+    "status": "PROCESSED",
+    "createdAt": "2023-06-14T00:00:00Z"
+  },
+  {
+    "PK": "PAYMENT#pay2",
+    "SK": "METADATA#pay2",
+    "id": "pay2",
+    "userId": "user123",
+    "referralId": "ref2",
+    "amount": 94525,
+    "type": "COMMISSION",
+    "status": "PROCESSED",
+    "createdAt": "2023-05-19T00:00:00Z"
+  },
+  {
+    "PK": "PAYMENT#pay3",
+    "SK": "METADATA#pay3",
+    "id": "pay3",
+    "userId": "user123",
+    "referralId": "ref3",
+    "amount": 175000,
+    "type": "COMMISSION",
+    "status": "PROCESSED",
+    "createdAt": "2023-04-09T00:00:00Z"
+  },
+  {
+    "PK": "PAYMENT#pay4",
+    "SK": "METADATA#pay4",
+    "id": "pay4",
+    "userId": "user123",
+    "referralId": "ref2",
+    "amount": 83000,
+    "type": "COMMISSION",
+    "status": "PROCESSED",
+    "createdAt": "2023-03-04T00:00:00Z"
+  }
+]

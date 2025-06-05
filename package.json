@@ -1,37 +1,54 @@
 {
-  "name": "amplify-vite-react-template",
+  "name": "miliare-monorepo",
+  "version": "0.1.0",
   "private": true,
-  "version": "0.0.0",
-  "type": "module",
+  "description": "Miliare application monorepo containing frontend and backend services",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "frontend:dev": "cd packages/frontend && npm run dev",
+    "frontend:build": "cd packages/frontend && npm run build",
+    "frontend:start": "cd packages/frontend && npm run start",
+    "frontend:lint": "cd packages/frontend && npm run lint",
+    "frontend:test": "cd packages/frontend && npm run test",
+    
+    "backend:deploy": "cd packages/backend && ./deploy.sh",
+    "backend:destroy": "cd packages/backend && ./destroy.sh",
+    "backend:test": "cd packages/backend && npm run test",
+    "backend:test-api": "cd packages/backend && ./test-api.sh",
+    "backend:build-go": "cd packages/backend && ./build-lambdas.sh",
+    
+    "amplify:pull": "cd packages/frontend && amplify pull",
+    "amplify:push": "cd packages/frontend && amplify push",
+    "amplify:status": "cd packages/frontend && amplify status",
+    
+    "install:all": "npm install && npm run install:frontend && npm run install:backend",
+    "install:frontend": "cd packages/frontend && npm install",
+    "install:backend": "cd packages/backend && npm install",
+    
+    "clean": "rm -rf node_modules packages/*/node_modules packages/backend/cdk.out packages/frontend/dist",
+    "format": "prettier --write \"packages/**/*.{ts,tsx,js,jsx,json,md}\""
   },
-  "dependencies": {
-    "@aws-amplify/ui-react": "^6.5.5",
-    "aws-amplify": "^6.6.6",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
   },
   "devDependencies": {
-    "@aws-amplify/backend": "^1.5.0",
-    "@aws-amplify/backend-cli": "^1.2.9",
-    "@types/react": "^18.2.66",
-    "@types/react-dom": "^18.2.22",
-    "@typescript-eslint/eslint-plugin": "^7.2.0",
-    "@typescript-eslint/parser": "^7.2.0",
-    "@vitejs/plugin-react": "^4.2.1",
-    "aws-cdk": "^2.138.0",
-    "aws-cdk-lib": "^2.138.0",
-    "constructs": "^10.3.0",
-    "esbuild": "^0.20.2",
-    "eslint": "^8.57.0",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.6",
-    "tsx": "^4.7.2",
-    "typescript": "^5.4.5",
-    "vite": "^5.4.10"
-  }
+    "prettier": "^3.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/miliare.git"
+  },
+  "keywords": [
+    "monorepo",
+    "amplify",
+    "aws-cdk",
+    "typescript",
+    "golang"
+  ],
+  "author": "",
+  "license": "MIT"
 }
+
