@@ -3,19 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "description": "Miliare application monorepo containing frontend and backend services",
-  "workspaces": [
-    "packages/*"
-  ],
   "scripts": {
-    "frontend:dev": "cd packages/frontend && npm run dev",
-    "frontend:build": "cd packages/frontend && npm run build",
-    "frontend:start": "cd packages/frontend && npm run start",
-    "frontend:lint": "cd packages/frontend && npm run lint",
-    "frontend:test": "cd packages/frontend && npm run test",
+    "frontend:dev": "cd packages/frontend && pnpm run dev",
+    "frontend:build": "cd packages/frontend && pnpm run build",
+    "frontend:start": "cd packages/frontend && pnpm run start",
+    "frontend:lint": "cd packages/frontend && pnpm run lint",
+    "frontend:test": "cd packages/frontend && pnpm run test",
     
     "backend:deploy": "cd packages/backend && ./deploy.sh",
     "backend:destroy": "cd packages/backend && ./destroy.sh",
-    "backend:test": "cd packages/backend && npm run test",
+    "backend:test": "cd packages/backend && pnpm run test",
     "backend:test-api": "cd packages/backend && ./test-api.sh",
     "backend:build-go": "cd packages/backend && ./build-lambdas.sh",
     
@@ -23,16 +20,14 @@
     "amplify:push": "cd packages/frontend && amplify push",
     "amplify:status": "cd packages/frontend && amplify status",
     
-    "install:all": "npm install && npm run install:frontend && npm run install:backend",
-    "install:frontend": "cd packages/frontend && npm install",
-    "install:backend": "cd packages/backend && npm install",
+    "install:all": "pnpm install",
     
     "clean": "rm -rf node_modules packages/*/node_modules packages/backend/cdk.out packages/frontend/dist",
     "format": "prettier --write \"packages/**/*.{ts,tsx,js,jsx,json,md}\""
   },
   "engines": {
-    "node": ">=18.0.0",
-    "npm": ">=8.0.0"
+    "node": ">=22.0.0",
+    "pnpm": ">=10.11.0"
   },
   "devDependencies": {
     "prettier": "^3.0.0"

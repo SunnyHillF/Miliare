@@ -1,22 +1,6 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
-import { PlaceholderStack } from '../lib/placeholder-stack';
-
-const app = new cdk.App();
-
-// This is a placeholder - no actual deployment will happen
-new PlaceholderStack(app, 'MiliarePlaceholderStack', {
-  env: {
-    account: process.env.CDK_DEFAULT_ACCOUNT,
-    region: process.env.CDK_DEFAULT_REGION || 'us-west-2'
-  },
-  description: 'Placeholder stack for Miliare backend (not for deployment)'
-});
-
-#!/usr/bin/env node
-import 'source-map-support/register';
-import * as cdk from 'aws-cdk-lib';
 import { MiliareBackendStack } from '../lib/miliare-backend-stack';
 
 const app = new cdk.App();
