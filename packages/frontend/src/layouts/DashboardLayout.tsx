@@ -50,6 +50,10 @@ const DashboardLayout = () => {
   if (user?.groups?.includes('teamLead') || user?.groups?.includes('admin')) {
     navLinks.push({ to: '/dashboard/team', icon: <Users className="h-5 w-5" />, label: 'Team' });
   }
+
+  if (user?.groups?.includes('admin')) {
+    navLinks.push({ to: '/dashboard/admin', icon: <Settings className="h-5 w-5" />, label: 'Admin' });
+  }
   
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
