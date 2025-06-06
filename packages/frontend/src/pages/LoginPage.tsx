@@ -37,6 +37,7 @@ const LoginPage = () => {
       toast.success('Login successful', 'Welcome back!');
       navigate('/dashboard');
     } catch (error) {
+      console.error('Login error:', error);
       toast.error('Login failed', 'Please check your credentials and try again.');
     } finally {
       setIsLoading(false);

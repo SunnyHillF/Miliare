@@ -118,6 +118,7 @@ const RegisterPage = () => {
       toast.success('Registration successful', 'Your account has been created!');
       navigate('/dashboard');
     } catch (error) {
+      console.error('Registration error:', error);
       toast.error('Registration failed', 'Please try again later.');
     } finally {
       setIsSubmitting(false);
