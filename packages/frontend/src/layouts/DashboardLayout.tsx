@@ -1,9 +1,18 @@
 import React, { useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { 
-  BarChart3, BookOpen, Share2, LogOut, Menu, X, User, 
-  Bell, ChevronDown, Settings
+import {
+  BarChart3,
+  BookOpen,
+  Share2,
+  LogOut,
+  Menu,
+  X,
+  User,
+  Users,
+  Bell,
+  ChevronDown,
+  Settings,
 } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { toast } from '../components/ui/Toaster';
@@ -37,6 +46,10 @@ const DashboardLayout = () => {
     { to: '/dashboard/learn', icon: <BookOpen className="h-5 w-5" />, label: 'Learn' },
     { to: '/dashboard/refer', icon: <Share2 className="h-5 w-5" />, label: 'Refer' },
   ];
+
+  if (user?.groups?.includes('teamLead')) {
+    navLinks.push({ to: '/dashboard/team', icon: <Users className="h-5 w-5" />, label: 'Team' });
+  }
   
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
