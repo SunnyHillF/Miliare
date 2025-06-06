@@ -124,6 +124,8 @@ const RegisterPage = () => {
       if (completed) {
         navigate('/dashboard');
       } else {
+        // Store password temporarily for auto-login after verification
+        sessionStorage.setItem('tempPassword', data.password);
         toast.info('Check your email to verify your account');
         navigate('/verify', { state: { email: data.email } });
       }
