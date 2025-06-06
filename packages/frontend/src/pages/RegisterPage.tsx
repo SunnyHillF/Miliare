@@ -12,7 +12,8 @@ import { toast } from '../components/ui/Toaster';
 
 // Form validation schema
 const registerSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
+  firstName: z.string().min(1, 'First name is required'),
+  lastName: z.string().min(1, 'Last name is required'),
   email: z.string().email('Please enter a valid email address'),
   phone: z.string().min(10, 'Please enter a valid phone number'),
   address: z.string().min(5, 'Please enter your full address'),
@@ -59,7 +60,8 @@ const RegisterPage = () => {
   const { register, handleSubmit, watch, formState: { errors }, trigger } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      name: '',
+      firstName: '',
+      lastName: '',
       email: '',
       phone: '',
       address: '',
@@ -87,7 +89,7 @@ const RegisterPage = () => {
     
     switch (step) {
       case 1:
-        fieldsToValidate = ['name', 'email', 'phone', 'address', 'city', 'state', 'zipCode'];
+        fieldsToValidate = ['firstName', 'lastName', 'email', 'phone', 'address', 'city', 'state', 'zipCode'];
         break;
       case 2:
         fieldsToValidate = ['company'];
@@ -113,7 +115,8 @@ const RegisterPage = () => {
     setIsSubmitting(true);
     try {
       const completed = await registerUser({
-        name: data.name,
+        firstName: data.firstName,
+        lastName: data.lastName,
         email: data.email,
         company: data.company,
         uplineEVC: data.uplineEVC,
@@ -143,11 +146,18 @@ const RegisterPage = () => {
         return (
           <div className="space-y-4">
             <h2 className="text-xl font-semibold mb-4">Personal Information</h2>
-            <Input
-              label="Full Name"
-              {...register('name')}
-              error={errors.name?.message}
-            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Input
+                label="First Name"
+                {...register('firstName')}
+                error={errors.firstName?.message}
+              />
+              <Input
+                label="Last Name"
+                {...register('lastName')}
+                error={errors.lastName?.message}
+              />
+            </div>
             <Input
               label="Email Address"
               type="email"

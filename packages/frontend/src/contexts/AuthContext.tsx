@@ -4,7 +4,8 @@ import { signIn, signUp, signOut, getCurrentUser, fetchAuthSession } from 'aws-a
 
 type User = {
   id: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   company: string;
   groups: string[];
@@ -43,7 +44,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         // Convert Amplify user to our User type
         const userData: User = {
           id: currentUser.userId,
-          name: currentUser.username, // Will be populated from registration form
+          firstName: 'User', // Will be populated from user attributes
+          lastName: '', // Will be populated from user attributes
           email: currentUser.signInDetails?.loginId || '',
           company: 'WFG', // Default for now, could come from user attributes
           groups,
@@ -91,7 +93,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         options: {
           userAttributes: {
             email: userData.email,
-            name: userData.name,
+            given_name: userData.firstName,
+            family_name: userData.lastName,
             // You can add custom attributes for company, upline, etc.
             'custom:company': userData.company,
             'custom:uplineSMD': userData.uplineSMD || '',
