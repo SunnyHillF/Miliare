@@ -8,6 +8,7 @@ import LearnPage from './pages/dashboard/LearnPage';
 import ReferPage from './pages/dashboard/ReferPage';
 import PartnerDetailPage from './pages/dashboard/PartnerDetailPage';
 import TeamPage from './pages/dashboard/TeamPage';
+import AdminPage from './pages/dashboard/AdminPage';
 import { Toaster } from './components/ui/Toaster';
 
 // Protected route component
@@ -49,6 +50,11 @@ function App() {
           <Route path="team" element={
             <ProtectedRoute requiredGroup="teamLead">
               <TeamPage />
+            </ProtectedRoute>
+          } />
+          <Route path="admin" element={
+            <ProtectedRoute requiredGroup="admin">
+              <AdminPage />
             </ProtectedRoute>
           } />
           <Route path="partners/:partnerId" element={<PartnerDetailPage />} />
