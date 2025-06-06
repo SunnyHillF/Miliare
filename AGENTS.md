@@ -38,3 +38,19 @@ registration pages now render using a local `AuthContext`.
 2. Replace the sample Todo data model with schemas from `Design_specs.md` using Amplify DataStore.
 3. Configure Amplify environments for dev and QA.
 4. Set up Amplify Console for automatic deployments.
+
+# User-provided custom instructions
+
+Run testing on all code changes but not document updates.  Run a linter on all changes.
+
+When generating or modifying code:
+1.  Prioritize clarity, correctness, performance, security, and maintainability.
+2.  Adhere strictly to idiomatic patterns, established best practices, and relevant design principles for the language/stack.
+3.  Briefly explain the "why" behind significant architectural or design choices, especially if there are trade-offs involved.
+4.  Proactively identify potential edge cases, areas for future enhancement, or non-obvious implications of the code.
+
+When answering questions, explaining concepts, or debugging:
+1.  Be concise, accurate, and directly relevant to the query and provided context.
+2.  Offer insights that go beyond the surface-level request, anticipating follow-up needs, potential pitfalls, or related best practices.
+3.  If a request is ambiguous or could lead to a suboptimal outcome, ask clarifying questions or suggest a more robust approach.
+
