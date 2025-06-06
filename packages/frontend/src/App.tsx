@@ -9,6 +9,7 @@ import ReferPage from './pages/dashboard/ReferPage';
 import PartnerDetailPage from './pages/dashboard/PartnerDetailPage';
 import TeamPage from './pages/dashboard/TeamPage';
 import AdminPage from './pages/dashboard/AdminPage';
+import VerifyEmailPage from './pages/VerifyEmailPage';
 import { Toaster } from './components/ui/Toaster';
 
 // Protected route component
@@ -37,6 +38,7 @@ function App() {
         {/* Public routes */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/verify" element={<VerifyEmailPage />} />
         
         {/* Protected routes */}
         <Route path="/dashboard" element={

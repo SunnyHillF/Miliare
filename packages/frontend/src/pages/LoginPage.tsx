@@ -36,9 +36,14 @@ const LoginPage = () => {
       await login(data.email, data.password);
       toast.success('Login successful', 'Welcome back!');
       navigate('/dashboard');
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Login error:', error);
-      toast.error('Login failed', 'Please check your credentials and try again.');
+      if ((error as { name?: string }).name === 'UserNotConfirmedException') {
+        toast.info('Please verify your email before logging in');
+        navigate('/verify', { state: { email: data.email } });
+      } else {
+        toast.error('Login failed', 'Please check your credentials and try again.');
+      }
     } finally {
       setIsLoading(false);
     }
