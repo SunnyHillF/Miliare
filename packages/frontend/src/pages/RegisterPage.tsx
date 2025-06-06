@@ -22,7 +22,13 @@ const registerSchema = z.object({
   company: z.string().min(1, 'Please select your company'),
   uplineEVC: z.string().optional(),
   uplineSMD: z.string().optional(),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
+  password: z
+    .string()
+    .min(8, 'Password must be at least 8 characters')
+    .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
+    .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
+    .regex(/[0-9]/, 'Password must contain at least one number')
+    .regex(/[^a-zA-Z0-9]/, 'Password must contain at least one symbol (!@#$%^&*)'),
   confirmPassword: z.string(),
 }).refine(data => data.password === data.confirmPassword, {
   message: "Passwords don't match",
@@ -209,12 +215,24 @@ const RegisterPage = () => {
         return (
           <div className="space-y-4">
             <h2 className="text-xl font-semibold mb-4">Create Password</h2>
-            <Input
-              label="Password"
-              type="password"
-              {...register('password')}
-              error={errors.password?.message}
-            />
+            <div className="space-y-2">
+              <Input
+                label="Password"
+                type="password"
+                {...register('password')}
+                error={errors.password?.message}
+              />
+              <div className="text-sm text-gray-600">
+                <p className="font-medium mb-1">Password must contain:</p>
+                <ul className="text-xs space-y-1 list-disc list-inside">
+                  <li>At least 8 characters</li>
+                  <li>One uppercase letter (A-Z)</li>
+                  <li>One lowercase letter (a-z)</li>
+                  <li>One number (0-9)</li>
+                  <li>One symbol (!@#$%^&*)</li>
+                </ul>
+              </div>
+            </div>
             <Input
               label="Confirm Password"
               type="password"

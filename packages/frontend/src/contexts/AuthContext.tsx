@@ -53,7 +53,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setUser(userData);
       }
     } catch (error) {
-      console.error('Error checking auth status:', error);
+      // Only log errors that aren't expected "not authenticated" scenarios
+      if (error && typeof error === 'object' && 'name' in error && error.name !== 'UserUnAuthenticatedException') {
+        console.error('Error checking auth status:', error);
+      }
       setUser(null);
     } finally {
       setIsLoading(false);
