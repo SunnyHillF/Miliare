@@ -7,16 +7,21 @@ import BusinessPage from './pages/dashboard/BusinessPage';
 import LearnPage from './pages/dashboard/LearnPage';
 import ReferPage from './pages/dashboard/ReferPage';
 import PartnerDetailPage from './pages/dashboard/PartnerDetailPage';
+import TeamPage from './pages/dashboard/TeamPage';
 import { Toaster } from './components/ui/Toaster';
 
 // Protected route component
-const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated } = useAuth();
-  
+const ProtectedRoute = ({ children, requiredGroup }: { children: React.ReactNode; requiredGroup?: string }) => {
+  const { isAuthenticated, user } = useAuth();
+
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
-  
+
+  if (requiredGroup && !user?.groups?.includes(requiredGroup)) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
   return <>{children}</>;
 };
 
@@ -37,6 +42,11 @@ function App() {
           <Route index element={<BusinessPage />} />
           <Route path="learn" element={<LearnPage />} />
           <Route path="refer" element={<ReferPage />} />
+          <Route path="team" element={
+            <ProtectedRoute requiredGroup="teamLead">
+              <TeamPage />
+            </ProtectedRoute>
+          } />
           <Route path="partners/:partnerId" element={<PartnerDetailPage />} />
         </Route>
         

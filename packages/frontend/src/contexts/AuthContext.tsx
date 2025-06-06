@@ -7,6 +7,7 @@ type User = {
   name: string;
   email: string;
   company: string;
+  groups: string[];
   uplineSMD?: string;
   uplineEVC?: string;
 };
@@ -17,7 +18,7 @@ type AuthContextType = {
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
-  register: (userData: Omit<User, 'id'> & { password: string }) => Promise<void>;
+  register: (userData: Omit<User, 'id' | 'groups'> & { password: string }) => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -36,14 +37,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const session = await fetchAuthSession();
       
       if (currentUser && session.tokens) {
+        const groups =
+          (session.tokens.idToken?.payload['cognito:groups'] as string[]) || [];
+
         // Convert Amplify user to our User type
         const userData: User = {
           id: currentUser.userId,
           name: currentUser.username, // Will be populated from registration form
           email: currentUser.signInDetails?.loginId || '',
           company: 'WFG', // Default for now, could come from user attributes
+          groups,
           uplineSMD: undefined, // Could come from user attributes
-          uplineEVC: undefined  // Could come from user attributes
+          uplineEVC: undefined, // Could come from user attributes
         };
         setUser(userData);
       }
@@ -72,7 +77,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const register = async (userData: Omit<User, 'id'> & { password: string }) => {
+  const register = async (userData: Omit<User, 'id' | 'groups'> & { password: string }) => {
     setIsLoading(true);
     try {
       const { isSignUpComplete } = await signUp({
