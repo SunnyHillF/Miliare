@@ -230,6 +230,7 @@ npx ampx pipeline-deploy --branch main --app-id <your-app-id>
 
 ## 📚 Documentation
 
+- `AGENTS.md` - Development setup guide and repository conventions
 - `/app_design/` - Business requirements and data models
 - `/app_design/dynamodb/` - Database schema and relationships
 - `/app_design/proto-mrn/` - UI component specifications

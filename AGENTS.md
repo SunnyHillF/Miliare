@@ -15,7 +15,7 @@ This repository is a PNPM based monorepo. It contains:
    - Frontend: `pnpm run frontend:lint`.
    - Backend linting is not yet configured.
 4. Run backend tests with `pnpm run backend:test` when backend code changes.
-5. Update documentation and design docs in `packages/backend/backend_design_docs` when backend APIs change.
+5. Update documentation and design docs under `app_design/` when backend APIs change.
 
 ## Design Reference
 The high level product requirements live in `app_design/Design_specs.md`. A working
@@ -25,7 +25,7 @@ review these files first.
 
 ## Notes
 - This project uses Node 22+ and pnpm 10.11.1.
-- A separate `AGENTS.md` exists in `packages/backend/backend_design_docs` with detailed backend design and maintenance notes.
+- Backend design notes are tracked in the `app_design` directory.
 - Keep this guide current as the project evolves.
 
 ## Phase 1 Progress
