@@ -18,7 +18,7 @@ type AuthContextType = {
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
-  register: (userData: Omit<User, 'id' | 'groups'> & { password: string }) => Promise<void>;
+  register: (userData: Omit<User, 'id' | 'groups'> & { password: string }) => Promise<boolean>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -100,11 +100,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (isSignUpComplete) {
         // Auto-sign in after successful registration
         await login(userData.email, userData.password);
+        // login() will handle setting isLoading(false) via checkAuthStatus
+        return true;
       } else {
+        // User needs to verify email - not complete yet
         setIsLoading(false);
+        return false;
       }
-
-      return isSignUpComplete;
     } catch (error) {
       setIsLoading(false);
       throw error;
