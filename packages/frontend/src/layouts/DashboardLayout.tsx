@@ -47,7 +47,7 @@ const DashboardLayout = () => {
     { to: '/dashboard/refer', icon: <Share2 className="h-5 w-5" />, label: 'Refer' },
   ];
 
-  if (user?.groups?.includes('teamLead')) {
+  if (user?.groups?.includes('teamLead') || user?.groups?.includes('admin')) {
     navLinks.push({ to: '/dashboard/team', icon: <Users className="h-5 w-5" />, label: 'Team' });
   }
   
