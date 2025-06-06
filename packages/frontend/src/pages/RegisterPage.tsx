@@ -12,7 +12,8 @@ import { toast } from '../components/ui/Toaster';
 
 // Form validation schema
 const registerSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
+  firstName: z.string().min(1, 'First name is required'),
+  lastName: z.string().min(1, 'Last name is required'),
   email: z.string().email('Please enter a valid email address'),
   phone: z.string().min(10, 'Please enter a valid phone number'),
   address: z.string().min(5, 'Please enter your full address'),
@@ -22,7 +23,13 @@ const registerSchema = z.object({
   company: z.string().min(1, 'Please select your company'),
   uplineEVC: z.string().optional(),
   uplineSMD: z.string().optional(),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
+  password: z
+    .string()
+    .min(8, 'Password must be at least 8 characters')
+    .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
+    .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
+    .regex(/[0-9]/, 'Password must contain at least one number')
+    .regex(/[^a-zA-Z0-9]/, 'Password must contain at least one symbol (!@#$%^&*)'),
   confirmPassword: z.string(),
 }).refine(data => data.password === data.confirmPassword, {
   message: "Passwords don't match",
@@ -53,7 +60,8 @@ const RegisterPage = () => {
   const { register, handleSubmit, watch, formState: { errors }, trigger } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      name: '',
+      firstName: '',
+      lastName: '',
       email: '',
       phone: '',
       address: '',
@@ -81,7 +89,7 @@ const RegisterPage = () => {
     
     switch (step) {
       case 1:
-        fieldsToValidate = ['name', 'email', 'phone', 'address', 'city', 'state', 'zipCode'];
+        fieldsToValidate = ['firstName', 'lastName', 'email', 'phone', 'address', 'city', 'state', 'zipCode'];
         break;
       case 2:
         fieldsToValidate = ['company'];
@@ -107,7 +115,8 @@ const RegisterPage = () => {
     setIsSubmitting(true);
     try {
       const completed = await registerUser({
-        name: data.name,
+        firstName: data.firstName,
+        lastName: data.lastName,
         email: data.email,
         company: data.company,
         uplineEVC: data.uplineEVC,
@@ -118,6 +127,8 @@ const RegisterPage = () => {
       if (completed) {
         navigate('/dashboard');
       } else {
+        // Store password temporarily for auto-login after verification
+        sessionStorage.setItem('tempPassword', data.password);
         toast.info('Check your email to verify your account');
         navigate('/verify', { state: { email: data.email } });
       }
@@ -135,11 +146,18 @@ const RegisterPage = () => {
         return (
           <div className="space-y-4">
             <h2 className="text-xl font-semibold mb-4">Personal Information</h2>
-            <Input
-              label="Full Name"
-              {...register('name')}
-              error={errors.name?.message}
-            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Input
+                label="First Name"
+                {...register('firstName')}
+                error={errors.firstName?.message}
+              />
+              <Input
+                label="Last Name"
+                {...register('lastName')}
+                error={errors.lastName?.message}
+              />
+            </div>
             <Input
               label="Email Address"
               type="email"
@@ -209,12 +227,24 @@ const RegisterPage = () => {
         return (
           <div className="space-y-4">
             <h2 className="text-xl font-semibold mb-4">Create Password</h2>
-            <Input
-              label="Password"
-              type="password"
-              {...register('password')}
-              error={errors.password?.message}
-            />
+            <div className="space-y-2">
+              <Input
+                label="Password"
+                type="password"
+                {...register('password')}
+                error={errors.password?.message}
+              />
+              <div className="text-sm text-gray-600">
+                <p className="font-medium mb-1">Password must contain:</p>
+                <ul className="text-xs space-y-1 list-disc list-inside">
+                  <li>At least 8 characters</li>
+                  <li>One uppercase letter (A-Z)</li>
+                  <li>One lowercase letter (a-z)</li>
+                  <li>One number (0-9)</li>
+                  <li>One symbol (!@#$%^&*)</li>
+                </ul>
+              </div>
+            </div>
             <Input
               label="Confirm Password"
               type="password"

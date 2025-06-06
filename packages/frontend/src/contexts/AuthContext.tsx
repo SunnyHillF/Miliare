@@ -4,7 +4,8 @@ import { signIn, signUp, signOut, getCurrentUser, fetchAuthSession } from 'aws-a
 
 type User = {
   id: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   company: string;
   groups: string[];
@@ -18,7 +19,7 @@ type AuthContextType = {
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
-  register: (userData: Omit<User, 'id' | 'groups'> & { password: string }) => Promise<void>;
+  register: (userData: Omit<User, 'id' | 'groups'> & { password: string }) => Promise<boolean>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -43,7 +44,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         // Convert Amplify user to our User type
         const userData: User = {
           id: currentUser.userId,
-          name: currentUser.username, // Will be populated from registration form
+          firstName: 'User', // Will be populated from user attributes
+          lastName: '', // Will be populated from user attributes
           email: currentUser.signInDetails?.loginId || '',
           company: 'WFG', // Default for now, could come from user attributes
           groups,
@@ -53,7 +55,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setUser(userData);
       }
     } catch (error) {
-      console.error('Error checking auth status:', error);
+      // Only log errors that aren't expected "not authenticated" scenarios
+      if (error && typeof error === 'object' && 'name' in error && error.name !== 'UserUnAuthenticatedException') {
+        console.error('Error checking auth status:', error);
+      }
       setUser(null);
     } finally {
       setIsLoading(false);
@@ -88,7 +93,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         options: {
           userAttributes: {
             email: userData.email,
-            name: userData.name,
+            given_name: userData.firstName,
+            family_name: userData.lastName,
             // You can add custom attributes for company, upline, etc.
             'custom:company': userData.company,
             'custom:uplineSMD': userData.uplineSMD || '',
@@ -100,11 +106,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (isSignUpComplete) {
         // Auto-sign in after successful registration
         await login(userData.email, userData.password);
+        // login() will handle setting isLoading(false) via checkAuthStatus
+        return true;
       } else {
+        // User needs to verify email - not complete yet
         setIsLoading(false);
+        return false;
       }
-
-      return isSignUpComplete;
     } catch (error) {
       setIsLoading(false);
       throw error;
