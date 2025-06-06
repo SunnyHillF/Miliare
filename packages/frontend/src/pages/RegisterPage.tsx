@@ -106,7 +106,7 @@ const RegisterPage = () => {
   const onSubmit = async (data: RegisterFormValues) => {
     setIsSubmitting(true);
     try {
-      await registerUser({
+      const completed = await registerUser({
         name: data.name,
         email: data.email,
         company: data.company,
@@ -114,9 +114,13 @@ const RegisterPage = () => {
         uplineSMD: data.uplineSMD,
         password: data.password,
       });
-      
       toast.success('Registration successful', 'Your account has been created!');
-      navigate('/dashboard');
+      if (completed) {
+        navigate('/dashboard');
+      } else {
+        toast.info('Check your email to verify your account');
+        navigate('/verify', { state: { email: data.email } });
+      }
     } catch (error) {
       console.error('Registration error:', error);
       toast.error('Registration failed', 'Please try again later.');

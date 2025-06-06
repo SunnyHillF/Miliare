@@ -77,7 +77,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const register = async (userData: Omit<User, 'id' | 'groups'> & { password: string }) => {
+  const register = async (
+    userData: Omit<User, 'id' | 'groups'> & { password: string }
+  ): Promise<boolean> => {
     setIsLoading(true);
     try {
       const { isSignUpComplete } = await signUp({
@@ -98,7 +100,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (isSignUpComplete) {
         // Auto-sign in after successful registration
         await login(userData.email, userData.password);
+      } else {
+        setIsLoading(false);
       }
+
+      return isSignUpComplete;
     } catch (error) {
       setIsLoading(false);
       throw error;
