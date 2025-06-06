@@ -40,6 +40,27 @@ describe('Team access', () => {
     expect(screen.getByRole('link', { name: /team/i })).toBeInTheDocument();
   });
 
+  it('shows Team link for users in admin group', () => {
+    vi.spyOn(AuthContext, 'useAuth').mockReturnValue({
+      ...baseAuth,
+      user: {
+        id: '1',
+        name: 'Admin',
+        email: 'admin@example.com',
+        company: 'WFG',
+        groups: ['admin'],
+      },
+    } as UseAuthReturn);
+
+    render(
+      <MemoryRouter>
+        <DashboardLayout />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByRole('link', { name: /team/i })).toBeInTheDocument();
+  });
+
   it('hides Team link for users without teamLead group', () => {
     vi.spyOn(AuthContext, 'useAuth').mockReturnValue({
       ...baseAuth,
@@ -61,7 +82,7 @@ describe('Team access', () => {
     expect(screen.queryByRole('link', { name: /team/i })).not.toBeInTheDocument();
   });
 
-  it('restricts /dashboard/team route to team leads', () => {
+  it('restricts /dashboard/team route when user lacks required groups', () => {
     vi.spyOn(AuthContext, 'useAuth').mockReturnValue({
       ...baseAuth,
       user: {
@@ -92,6 +113,27 @@ describe('Team access', () => {
         email: 'lead@example.com',
         company: 'WFG',
         groups: ['teamLead'],
+      },
+    } as UseAuthReturn);
+
+    render(
+      <MemoryRouter initialEntries={["/dashboard/team"]}>
+        <App />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText(/your team dashboard/i)).toBeInTheDocument();
+  });
+
+  it('allows admins to view the team dashboard', () => {
+    vi.spyOn(AuthContext, 'useAuth').mockReturnValue({
+      ...baseAuth,
+      user: {
+        id: '1',
+        name: 'Admin',
+        email: 'admin@example.com',
+        company: 'WFG',
+        groups: ['admin'],
       },
     } as UseAuthReturn);
 

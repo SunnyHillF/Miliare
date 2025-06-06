@@ -18,7 +18,11 @@ const ProtectedRoute = ({ children, requiredGroup }: { children: React.ReactNode
     return <Navigate to="/login" replace />;
   }
 
-  if (requiredGroup && !user?.groups?.includes(requiredGroup)) {
+  if (
+    requiredGroup &&
+    !user?.groups?.includes(requiredGroup) &&
+    !user?.groups?.includes('admin')
+  ) {
     return <Navigate to="/dashboard" replace />;
   }
 
