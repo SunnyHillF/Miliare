@@ -68,11 +68,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = async (email: string, password: string) => {
     setIsLoading(true);
     try {
+      // If a user is already authenticated, sign them out first to avoid
+      // "UserAlreadyAuthenticatedException" errors from Amplify.
+      try {
+        await getCurrentUser();
+        await signOut();
+      } catch {
+        // getCurrentUser throws if no user is signed in; ignore in that case
+      }
+
       const { isSignedIn } = await signIn({
         username: email,
         password: password,
       });
-      
+
       if (isSignedIn) {
         await checkAuthStatus();
       }
