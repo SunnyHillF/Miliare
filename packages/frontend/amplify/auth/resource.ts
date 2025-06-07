@@ -12,6 +12,8 @@ export const auth = defineAuth({
       verificationEmailBody: (createCode) => `Welcome to Miliare! Use this code to confirm your account: ${createCode()}`,
     },
   },
+  // User pool groups used throughout the app for authorization
+  groups: ["admin", "teamLead"],
   userAttributes: {
     // Standard attributes
     email: {
