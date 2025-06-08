@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
-  BarChart3,
   TrendingUp,
   Clock,
   DollarSign,
@@ -9,27 +8,24 @@ import {
 } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { Link } from 'react-router-dom';
+import {
+  summary,
+  pendingReferrals,
+  recentPayments,
+  earningsData6Months,
+  earningsData12Months,
+  earningsDataYear,
+} from '../../data/dashboardData';
+import { EarningsOverviewChart } from '../../components/EarningsOverviewChart';
 
 const BusinessPage = () => {
-  
-  // Mock data for demonstration
-  const totalEarnings = 14250.75;
-  const pendingCommissions = 2430.50;
-  const referralsCount = 35;
-  const successfulReferrals = 28;
-  
-  const recentPayments = [
-    { id: 1, date: '2023-06-15', amount: 1250.50, status: 'Paid', company: 'Sunny Hill Financial' },
-    { id: 2, date: '2023-05-20', amount: 945.25, status: 'Paid', company: 'Prime Corporate Services' },
-    { id: 3, date: '2023-04-10', amount: 1750.00, status: 'Paid', company: 'ANCO Insurance' },
-    { id: 4, date: '2023-03-05', amount: 830.00, status: 'Paid', company: 'Summit Business Syndicate' },
-  ];
-  
-  const pendingReferrals = [
-    { id: 1, date: '2023-06-28', client: 'John Smith', company: 'Prime Corporate Services', status: 'In Progress', estimatedCommission: 850.00 },
-    { id: 2, date: '2023-06-25', client: 'Sarah Johnson', company: 'Sunny Hill Financial', status: 'In Progress', estimatedCommission: 1280.50 },
-    { id: 3, date: '2023-06-20', client: 'Michael Brown', company: 'Impact Health Sharing', status: 'In Review', estimatedCommission: 300.00 },
-  ];
+  const [period, setPeriod] = useState('Last 6 months');
+
+  const earningsMap: Record<string, typeof earningsData6Months> = {
+    'Last 6 months': earningsData6Months,
+    'Last 12 months': earningsData12Months,
+    'Year to date': earningsDataYear,
+  };
   
   return (
     <div className="space-y-8">
@@ -39,77 +35,44 @@ const BusinessPage = () => {
           Track your referrals, earnings, and pending commissions
         </p>
       </div>
-      
+
       {/* Stats overview */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-          <div className="flex items-center">
-            <div className="p-3 rounded-full bg-blue-100 text-primary">
-              <DollarSign className="h-6 w-6" />
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">Total Earnings</p>
-              <p className="text-2xl font-semibold text-gray-900">${totalEarnings.toLocaleString()}</p>
-            </div>
-          </div>
-        </div>
-        
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-          <div className="flex items-center">
-            <div className="p-3 rounded-full bg-green-100 text-success">
-              <Clock className="h-6 w-6" />
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">Pending Commissions</p>
-              <p className="text-2xl font-semibold text-gray-900">${pendingCommissions.toLocaleString()}</p>
+        {summary.map(metric => (
+          <div key={metric.label} className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+            <div className="flex items-center">
+              <div className={`p-3 rounded-full ${metric.bgColor} ${metric.iconColor}`}>{
+                metric.icon === 'DollarSign' ? <DollarSign className="h-6 w-6" /> :
+                metric.icon === 'Clock' ? <Clock className="h-6 w-6" /> :
+                metric.icon === 'Users' ? <Users className="h-6 w-6" /> :
+                <TrendingUp className="h-6 w-6" />
+              }</div>
+              <div className="ml-4">
+                <p className="text-sm font-medium text-gray-500">{metric.label}</p>
+                <p className="text-2xl font-semibold text-gray-900">{metric.value}</p>
+              </div>
             </div>
           </div>
-        </div>
-        
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-          <div className="flex items-center">
-            <div className="p-3 rounded-full bg-purple-100 text-purple-600">
-              <Users className="h-6 w-6" />
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">Total Referrals</p>
-              <p className="text-2xl font-semibold text-gray-900">{referralsCount}</p>
-            </div>
-          </div>
-        </div>
-        
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-          <div className="flex items-center">
-            <div className="p-3 rounded-full bg-orange-100 text-orange-600">
-              <TrendingUp className="h-6 w-6" />
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">Success Rate</p>
-              <p className="text-2xl font-semibold text-gray-900">{Math.round((successfulReferrals / referralsCount) * 100)}%</p>
-            </div>
-          </div>
-        </div>
+        ))}
       </div>
       
-      {/* Chart/Graph placeholder */}
+      {/* Earnings chart */}
       <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-semibold text-gray-900">Earnings Overview</h2>
           <div>
-            <select className="py-1 px-3 border border-gray-300 rounded-md text-sm">
+            <select
+              className="py-1 px-3 border border-gray-300 rounded-md text-sm"
+              value={period}
+              onChange={e => setPeriod(e.target.value)}
+            >
               <option>Last 6 months</option>
               <option>Last 12 months</option>
               <option>Year to date</option>
             </select>
           </div>
         </div>
-        
-        <div className="flex items-center justify-center h-64 bg-gray-50 rounded-lg border border-dashed border-gray-300">
-          <div className="text-center">
-            <BarChart3 className="mx-auto h-12 w-12 text-gray-400" />
-            <p className="mt-2 text-sm text-gray-500">Earnings visualization will appear here</p>
-          </div>
-        </div>
+        <EarningsOverviewChart data={earningsMap[period]} />
       </div>
       
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -154,16 +117,14 @@ const BusinessPage = () => {
                       {referral.company}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                        referral.status === 'In Progress' 
-                          ? 'bg-yellow-100 text-yellow-800' 
-                          : 'bg-blue-100 text-blue-800'
-                      }`}>
+                      <span
+                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${referral.statusColor}`}
+                      >
                         {referral.status}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      ${referral.estimatedCommission.toLocaleString()}
+                      {referral.amount}
                     </td>
                   </tr>
                 ))}
@@ -180,17 +141,17 @@ const BusinessPage = () => {
           </div>
           
           <div className="space-y-4">
-            {recentPayments.map((payment) => (
-              <div key={payment.id} className="flex items-center p-4 bg-gray-50 rounded-lg">
+            {recentPayments.map((payment, i) => (
+              <div key={i} className="flex items-center p-4 bg-gray-50 rounded-lg">
                 <div className="flex-shrink-0">
                   <CreditCard className="h-8 w-8 text-gray-400" />
                 </div>
                 <div className="ml-4 flex-1">
                   <p className="text-sm font-medium text-gray-900">{payment.company}</p>
-                  <p className="text-xs text-gray-500">{new Date(payment.date).toLocaleDateString()}</p>
+                  <p className="text-xs text-gray-500">{payment.date}</p>
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-semibold text-gray-900">${payment.amount.toLocaleString()}</p>
+                  <p className="text-sm font-semibold text-gray-900">{payment.amount}</p>
                   <p className="text-xs font-medium text-green-600">{payment.status}</p>
                 </div>
               </div>
