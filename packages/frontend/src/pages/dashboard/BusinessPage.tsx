@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
-  BarChart3,
   TrendingUp,
   Clock,
   DollarSign,
@@ -9,6 +8,7 @@ import {
 } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { Link } from 'react-router-dom';
+import EarningsChart, { EarningsPoint } from '../../components/EarningsChart';
 
 const BusinessPage = () => {
   
@@ -30,6 +30,37 @@ const BusinessPage = () => {
     { id: 2, date: '2023-06-25', client: 'Sarah Johnson', company: 'Sunny Hill Financial', status: 'In Progress', estimatedCommission: 1280.50 },
     { id: 3, date: '2023-06-20', client: 'Michael Brown', company: 'Impact Health Sharing', status: 'In Review', estimatedCommission: 300.00 },
   ];
+
+  const earningsData6Months: EarningsPoint[] = [
+    { month: 'Jan', earnings: 2000 },
+    { month: 'Feb', earnings: 2500 },
+    { month: 'Mar', earnings: 3000 },
+    { month: 'Apr', earnings: 3500 },
+    { month: 'May', earnings: 2800 },
+    { month: 'Jun', earnings: 2950 },
+  ];
+
+  const earningsData12Months: EarningsPoint[] = [
+    { month: 'Jul', earnings: 3100 },
+    { month: 'Aug', earnings: 3300 },
+    { month: 'Sep', earnings: 3400 },
+    { month: 'Oct', earnings: 3600 },
+    { month: 'Nov', earnings: 3700 },
+    { month: 'Dec', earnings: 3900 },
+    ...earningsData6Months,
+  ].slice(-12);
+
+  const earningsDataYear: EarningsPoint[] = [...earningsData12Months];
+
+  const [period, setPeriod] = useState('Last 6 months');
+
+  const earningsMap: Record<string, EarningsPoint[]> = {
+    'Last 6 months': earningsData6Months,
+    'Last 12 months': earningsData12Months,
+    'Year to date': earningsDataYear,
+  };
+
+  const chartData = earningsMap[period] || earningsData6Months;
   
   return (
     <div className="space-y-8">
@@ -91,24 +122,24 @@ const BusinessPage = () => {
         </div>
       </div>
       
-      {/* Chart/Graph placeholder */}
       <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-semibold text-gray-900">Earnings Overview</h2>
           <div>
-            <select className="py-1 px-3 border border-gray-300 rounded-md text-sm">
+            <select
+              className="py-1 px-3 border border-gray-300 rounded-md text-sm"
+              value={period}
+              onChange={(e) => setPeriod(e.target.value)}
+            >
               <option>Last 6 months</option>
               <option>Last 12 months</option>
               <option>Year to date</option>
             </select>
           </div>
         </div>
-        
-        <div className="flex items-center justify-center h-64 bg-gray-50 rounded-lg border border-dashed border-gray-300">
-          <div className="text-center">
-            <BarChart3 className="mx-auto h-12 w-12 text-gray-400" />
-            <p className="mt-2 text-sm text-gray-500">Earnings visualization will appear here</p>
-          </div>
+
+        <div className="h-64">
+          <EarningsChart data={chartData} />
         </div>
       </div>
       
