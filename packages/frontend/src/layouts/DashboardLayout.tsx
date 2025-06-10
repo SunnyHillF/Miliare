@@ -51,8 +51,12 @@ const DashboardLayout = () => {
     navLinks.push({ to: '/dashboard/team', icon: <Users className="h-5 w-5" />, label: 'Team' });
   }
 
+  if (user?.groups?.includes('partnerAdmin') || user?.groups?.includes('admin')) {
+    navLinks.push({ to: '/dashboard/company-admin', icon: <Settings className="h-5 w-5" />, label: 'Admin' });
+  }
+
   if (user?.groups?.includes('admin')) {
-    navLinks.push({ to: '/dashboard/admin', icon: <Settings className="h-5 w-5" />, label: 'Admin' });
+    navLinks.push({ to: '/dashboard/admin', icon: <Settings className="h-5 w-5" />, label: 'Site Admin' });
   }
   
   return (
@@ -105,7 +109,7 @@ const DashboardLayout = () => {
                     onClick={toggleProfileMenu}
                     className="flex items-center max-w-xs text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
                   >
-                    <span className="mr-2">{user?.name}</span>
+                    <span className="mr-2">{user?.firstName} {user?.lastName}</span>
                     <ChevronDown className="h-4 w-4" />
                   </Button>
                 </div>
@@ -189,11 +193,11 @@ const DashboardLayout = () => {
               <div className="flex items-center px-4">
                 <div className="flex-shrink-0">
                   <div className="h-10 w-10 rounded-full bg-primary text-white flex items-center justify-center">
-                    {user?.name?.charAt(0) || 'U'}
+                    {user?.firstName?.charAt(0) || 'U'}
                   </div>
                 </div>
                 <div className="ml-3">
-                  <div className="text-base font-medium text-gray-800">{user?.name}</div>
+                  <div className="text-base font-medium text-gray-800">{user?.firstName} {user?.lastName}</div>
                   <div className="text-sm font-medium text-gray-500">{user?.email}</div>
                 </div>
               </div>
