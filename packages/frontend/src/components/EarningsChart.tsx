@@ -7,6 +7,7 @@ import {
   LineElement,
   Tooltip,
   Legend,
+  type TooltipItem,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 
@@ -79,8 +80,9 @@ const EarningsChart: React.FC<EarningsChartProps> = ({ data }) => {
             font: {
               size: 12,
             },
-            callback: function(value: any) {
-              return '$' + value.toLocaleString();
+            callback(value: number | string) {
+              const num = typeof value === 'number' ? value : Number(value);
+              return '$' + num.toLocaleString();
             },
           },
         },
@@ -96,8 +98,8 @@ const EarningsChart: React.FC<EarningsChartProps> = ({ data }) => {
           borderColor: '#1e40af',
           borderWidth: 1,
           callbacks: {
-            label: function(context: any) {
-              return 'Earnings: $' + context.parsed.y.toLocaleString();
+            label(context: TooltipItem<'line'>) {
+              return `Earnings: $${context.parsed.y.toLocaleString()}`;
             },
           },
         },
