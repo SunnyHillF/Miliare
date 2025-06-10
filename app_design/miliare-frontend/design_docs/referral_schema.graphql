@@ -1,0 +1,47 @@
+# GraphQL schema for referral-related operations
+
+scalar DateTime
+
+enum ReferralStatus {
+  IN_PROGRESS
+  IN_REVIEW
+  PAID
+  REJECTED
+}
+
+type Referral {
+  id: ID!
+  userId: ID!
+  companyId: ID!
+  clientName: String!
+  status: ReferralStatus!
+  amount: Float
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Payment {
+  id: ID!
+  referralId: ID!
+  userId: ID!
+  amount: Float!
+  date: DateTime!
+  status: String!
+}
+
+type Query {
+  referrals(userId: ID!): [Referral!]!
+  referral(id: ID!): Referral
+  payments(userId: ID!): [Payment!]!
+}
+
+input CreateReferralInput {
+  userId: ID!
+  companyId: ID!
+  clientName: String!
+}
+
+input UpdateReferralStatusInput {
+  id: ID!
+  status: ReferralStatus!
+}

@@ -1,0 +1,436 @@
+openapi: 3.1.0
+info:
+  title: Miliare Referral Network API
+  version: 1.0.0
+  description: |
+    Legacy REST API specification previously used for SSR data fetching.
+    The project now relies on Amplify's GraphQL API and Storage for all data operations.
+    Since the application is built with Amplify Gen 2, this file is retained for historical reference only.
+servers:
+  - url: https://api.miliare.example.com
+paths:
+  /users/{userId}:
+    get:
+      summary: Get user profile
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+    put:
+      summary: Update user profile
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserProfile'
+      responses:
+        '200':
+          description: Updated
+  /partners:
+    post:
+      summary: Create partner
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Partner'
+      responses:
+        '201':
+          description: Created
+    get:
+      summary: List partners
+      responses:
+        '200':
+          description: Partner list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Partner'
+  /partners/{partnerId}:
+    get:
+      summary: Get partner
+      parameters:
+        - name: partnerId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Partner
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Partner'
+    put:
+      summary: Update partner
+      parameters:
+        - name: partnerId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Partner'
+      responses:
+        '200':
+          description: Updated
+  /customers:
+    post:
+      summary: Create customer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer'
+      responses:
+        '201':
+          description: Created
+    get:
+      summary: List customers
+      responses:
+        '200':
+          description: Customer list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
+  /customers/{customerId}:
+    get:
+      summary: Get customer
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Customer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+    put:
+      summary: Update customer
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer'
+      responses:
+        '200':
+          description: Updated
+  /referrals:
+    post:
+      summary: Create referral
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Referral'
+      responses:
+        '201':
+          description: Created
+    get:
+      summary: List referrals
+      responses:
+        '200':
+          description: Referral list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Referral'
+  /referrals/{referralId}:
+    get:
+      summary: Get referral
+      parameters:
+        - name: referralId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Referral
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Referral'
+    put:
+      summary: Update referral
+      parameters:
+        - name: referralId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Referral'
+      responses:
+        '200':
+          description: Updated
+  /users/{userId}/payments:
+    get:
+      summary: Get payment history for a user
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of payments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Payment'
+  /docusign/envelopes:
+    post:
+      summary: Create DocuSign envelope
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                envelopeType:
+                  type: string
+                  description: Type of document (e.g., 1099, directDeposit)
+              required:
+                - userId
+                - envelopeType
+      responses:
+        '201':
+          description: Envelope created
+  /docusign/envelopes/{envelopeId}:
+    get:
+      summary: Get envelope status
+      parameters:
+        - name: envelopeId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Envelope status
+  /docusign/callback:
+    post:
+      summary: DocuSign webhook callback
+      description: Receives status updates from DocuSign
+      responses:
+        '200':
+          description: Callback processed
+  /bonus-pools:
+    post:
+      summary: Create bonus pool
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BonusPool'
+      responses:
+        '201':
+          description: Created
+    get:
+      summary: List bonus pools
+      responses:
+        '200':
+          description: Bonus pool list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BonusPool'
+  /bonus-pools/{poolId}:
+    get:
+      summary: Get bonus pool details
+      parameters:
+        - name: poolId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Bonus pool
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BonusPool'
+    put:
+      summary: Update bonus pool
+      parameters:
+        - name: poolId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BonusPool'
+      responses:
+        '200':
+          description: Updated
+  /bonus-pools/{poolId}/report:
+    get:
+      summary: Get bonus pool report
+      parameters:
+        - name: poolId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Bonus pool report
+components:
+  schemas:
+    UserProfile:
+      type: object
+      properties:
+        userId:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        address:
+          type: string
+        company:
+          type: string
+        uplineEVC:
+          type: string
+        uplineSMD:
+          type: string
+        bankInfoDocument:
+          type: string
+          description: DocuSign envelope ID for bank info form
+        taxDocument:
+          type: string
+          description: DocuSign envelope ID for tax form
+      required:
+        - userId
+        - name
+        - email
+    Partner:
+      type: object
+      properties:
+        partnerId:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        status:
+          type: string
+    Customer:
+      type: object
+      properties:
+        customerId:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+    Referral:
+      type: object
+      properties:
+        referralId:
+          type: string
+        userId:
+          type: string
+        customerId:
+          type: string
+        status:
+          type: string
+    Payment:
+      type: object
+      properties:
+        paymentId:
+          type: string
+        referralId:
+          type: string
+        userId:
+          type: string
+        amount:
+          type: number
+        date:
+          type: string
+          format: date-time
+        status:
+          type: string
+    BonusPool:
+      type: object
+      properties:
+        poolId:
+          type: string
+        period:
+          type: string
+        amount:
+          type: number
+        distributions:
+          type: array
+          items:
+            type: object
+            properties:
+              userId:
+                type: string
+              amount:
+                type: number
+
