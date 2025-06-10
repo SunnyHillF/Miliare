@@ -34,21 +34,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const checkAuthStatus = async () => {
     try {
-      // Temporarily using mock user for development
-      const mockUser: User = {
-        id: 'mock-user-id',
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'john.doe@example.com',
-        company: 'WFG',
-        groups: ['user', 'teamLead', 'admin', 'partnerAdmin'], // Added partnerAdmin for testing
-        uplineSMD: 'Mock SMD',
-        uplineEVC: 'Mock EVC',
-      };
-      setUser(mockUser);
-      
-      // Original Amplify code (commented out for development)
-      /*
       const currentUser = await getCurrentUser();
       const session = await fetchAuthSession();
       
@@ -69,7 +54,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         };
         setUser(userData);
       }
-      */
     } catch (error) {
       // Only log errors that aren't expected "not authenticated" scenarios
       if (error && typeof error === 'object' && 'name' in error && error.name !== 'UserUnAuthenticatedException') {
@@ -84,11 +68,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = async (email: string, password: string) => {
     setIsLoading(true);
     try {
-      // Mock login for development - just set the mock user
-      await checkAuthStatus();
-      
-      // Original Amplify login code (commented out for development)
-      /*
       // If a user is already authenticated, sign them out first to avoid
       // "UserAlreadyAuthenticatedException" errors from Amplify.
       try {
@@ -106,7 +85,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (isSignedIn) {
         await checkAuthStatus();
       }
-      */
     } catch (error) {
       setIsLoading(false);
       throw error;
