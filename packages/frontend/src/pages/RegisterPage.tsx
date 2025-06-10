@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { ChevronLeft, ChevronRight, CheckCircle } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { Select } from '../components/ui/Select';
@@ -83,10 +83,10 @@ const RegisterPage = () => {
   }, [company]);
 
   const totalSteps = 3;
-  
+
   const nextStep = async () => {
     let fieldsToValidate: Array<keyof RegisterFormValues> = [];
-    
+
     switch (step) {
       case 1:
         fieldsToValidate = ['firstName', 'lastName', 'email', 'phone', 'address', 'city', 'state', 'zipCode'];
@@ -251,24 +251,6 @@ const RegisterPage = () => {
               {...register('confirmPassword')}
               error={errors.confirmPassword?.message}
             />
-            
-            <div className="mt-8">
-              <h3 className="font-medium mb-4">Next Steps After Registration:</h3>
-              <div className="space-y-3">
-                <div className="flex items-start">
-                  <CheckCircle className="text-success mr-3 mt-0.5 flex-shrink-0" size={20} />
-                  <p>You'll be redirected to complete a 1099-NEC form for tax purposes</p>
-                </div>
-                <div className="flex items-start">
-                  <CheckCircle className="text-success mr-3 mt-0.5 flex-shrink-0" size={20} />
-                  <p>You'll need to provide direct deposit information for commission payments</p>
-                </div>
-                <div className="flex items-start">
-                  <CheckCircle className="text-success mr-3 mt-0.5 flex-shrink-0" size={20} />
-                  <p>Once completed, you'll have full access to the Miliare Referral Network</p>
-                </div>
-              </div>
-            </div>
           </div>
         );
       default:
