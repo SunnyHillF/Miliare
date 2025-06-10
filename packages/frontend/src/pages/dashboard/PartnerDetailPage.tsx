@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { 
   ArrowLeft, 
@@ -14,10 +14,12 @@ import {
 import { Button } from '../../components/ui/Button';
 import { partnersData } from '../../data/partnersData';
 import { toast } from '../../components/ui/Toaster';
+import ReferralFormModal from '../../components/ReferralFormModal';
 
 const PartnerDetailPage = () => {
   const { partnerId } = useParams<{ partnerId: string }>();
   const navigate = useNavigate();
+  const [showReferralModal, setShowReferralModal] = useState(false);
   
   const partner = useMemo(() => {
     return partnersData.find(p => p.id === partnerId);
@@ -145,17 +147,13 @@ const PartnerDetailPage = () => {
                 </Button>
               </a>
               
-              <a 
-                href={partner.referralUrl} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="inline-block"
+              <Button
+                className="w-full sm:w-auto flex items-center"
+                onClick={() => setShowReferralModal(true)}
               >
-                <Button className="w-full sm:w-auto flex items-center">
-                  <Send className="mr-2 h-4 w-4" />
-                  Refer a Client
-                </Button>
-              </a>
+                <Send className="mr-2 h-4 w-4" />
+                Refer a Client
+              </Button>
             </div>
           </div>
         </div>
@@ -285,19 +283,21 @@ const PartnerDetailPage = () => {
             </p>
           </div>
           <div className="mt-6 md:mt-0">
-            <a 
-              href={partner.referralUrl} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="inline-block"
+            <Button
+              variant="outline"
+              className="w-full md:w-auto bg-white text-primary hover:bg-gray-100"
+              onClick={() => setShowReferralModal(true)}
             >
-              <Button variant="outline" className="w-full md:w-auto bg-white text-primary hover:bg-gray-100">
-                Make a Referral Now
-              </Button>
-            </a>
+              Make a Referral Now
+            </Button>
           </div>
         </div>
       </div>
+      <ReferralFormModal
+        open={showReferralModal}
+        onClose={() => setShowReferralModal(false)}
+        partnerName={partner.name}
+      />
     </div>
   );
 };
