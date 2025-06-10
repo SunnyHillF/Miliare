@@ -28,10 +28,27 @@ const ReferralFormModal: React.FC<ReferralFormModalProps> = ({ open, onClose, pa
     resolver: zodResolver(referralSchema),
   });
 
-  const onSubmit = (formData: ReferralFormValues) => {
-    toast.success('Referral submitted', `Thank you for referring ${formData.name}.`);
-    reset();
-    onClose();
+  const onSubmit = async (formData: ReferralFormValues) => {
+    try {
+      const response = await fetch('/api/referrals', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      if (!response.ok) {
+        throw new Error('Request failed');
+      }
+
+      toast.success('Referral submitted', `Thank you for referring ${formData.name}.`);
+      reset();
+      onClose();
+    } catch (error) {
+      console.error('Failed to submit referral', error);
+      toast.error('Submission failed', 'Please try again later.');
+    }
   };
 
   return (
