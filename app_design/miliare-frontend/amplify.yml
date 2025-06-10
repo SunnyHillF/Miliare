@@ -1,0 +1,72 @@
+# For Amplify Gen 2 - Build Instance Configuration:
+# 1. Go to AWS Amplify Console → Your App → Build settings → Edit
+# 2. Under "Advanced settings" → "Build instance type" select:
+#    - Standard: 4 vCPUs, 8 GiB memory, 128 GB disk
+#    - Large: 8 vCPUs, 16 GiB memory, 128 GB disk  
+#    - XLarge: 36 vCPUs, 72 GiB memory, 256 GB disk
+# 3. ✅ CONFIRMED: XLarge instance is active (72GiB Memory, 36vCPUs)
+
+version: 1
+backend:
+  phases:
+    build:
+      commands:
+        - nvm use 22
+        - corepack enable
+        - corepack prepare pnpm@10.11.0 --activate
+        - pnpm install --frozen-lockfile --prefer-offline
+        - npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID
+frontend:
+  phases:
+    preBuild:
+      commands:
+        # Memory optimization for XLarge instance (72GB RAM confirmed available)
+        # Using aggressive settings to handle lucide-react and other heavy deps
+        - export NODE_OPTIONS="--max_old_space_size=50000 --max-semi-space-size=2048"
+        - export NEXT_TELEMETRY_DISABLED=1
+        - export CI=true
+        - export NEXT_SHARP=0
+        # Aggressive cleanup to prevent large cache files
+        - rm -rf .next
+        - rm -rf node_modules/.cache
+        - rm -rf .npm
+        - rm -rf pnpm-store/.tmp
+        - rm -rf .cache
+        - find node_modules -name "*.map" -delete || true
+        # Check available memory and instance type
+        - node -e "console.log('Available heap size (MB):', v8.getHeapStatistics().heap_size_limit / 1024 / 1024)"
+        - echo "CPU count:" && nproc
+        - echo "Memory info:" && free -h || echo "Memory info not available"
+        # Install dependencies efficiently
+        - pnpm install --frozen-lockfile --prefer-offline
+    build:
+      commands:
+        - nvm use 22
+        - corepack enable
+        - corepack prepare pnpm@10.11.0 --activate
+        # Ensure NODE_OPTIONS is still set for build with XLarge memory
+        - export NODE_OPTIONS="--max_old_space_size=50000 --max-semi-space-size=2048"
+        # Production build with memory monitoring
+        - NODE_ENV=production pnpm run build
+    postBuild:
+      commands:
+        # Optimize cache size by removing large unnecessary files
+        - find .next -name "*.map" -delete || true
+        - find .next -name "*.d.ts" -delete || true
+        - rm -rf .next/cache/webpack || true
+        - echo "Build completed successfully"
+        # Show final sizes for debugging
+        - echo "Final .next size:" && du -sh .next || true
+        - echo "Cache size check..." && du -sh .next/cache || true
+  artifacts:
+    baseDirectory: .next
+    files:
+      - '**/*'
+  cache:
+    paths:
+      # Cache only essential and smaller directories to stay under 5GB limit
+      # node_modules (1.4GB) + .next/cache can exceed 5GB, so being selective
+      - .next/cache/swc/**/*
+      - .next/cache/eslint/**/*
+      # Skip large webpack cache and full node_modules
+      # Dependencies will reinstall quickly with --prefer-offline

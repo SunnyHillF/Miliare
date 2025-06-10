@@ -1,0 +1,21 @@
+{
+  "name": "Miliare Referral Network",
+  "short_name": "Miliare",
+  "description": "Join the Miliare Referral Network to track referrals, earnings, and commissions.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fafbfc",
+  "theme_color": "#1e40af",
+  "icons": [
+    {
+      "src": "/favicon/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/favicon/safari-pinned-tab.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
