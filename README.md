@@ -56,8 +56,8 @@ Miliare/
 - AWS Lambda for custom business logic
 - Amplify CLI Gen 2 for infrastructure
 
-**Development:**
-- pnpm 10.11.0 for package management
+-**Development:**
+- pnpm 10.12.1 for package management
 - Node.js 22 runtime
 - TypeScript for type safety
 - ESLint and Prettier for code quality
@@ -106,7 +106,7 @@ Miliare/
 ### Prerequisites
 
 - Node.js 22+
-- pnpm 10.11.0+
+ - pnpm 10.12.1+
 - AWS CLI configured
 - Amplify CLI installed
 
