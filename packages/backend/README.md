@@ -23,7 +23,7 @@ the application.
 
 ## Useful commands
 
-This project requires **Node.js 22+**, **pnpm 10.11.1**, and **Go 1.24** when
+This project requires **Node.js 22+**, **pnpm 10.12.1**, and **Go 1.24** when
 building the Lambda functions. The basic workflow is:
 
 1. `pnpm install`
