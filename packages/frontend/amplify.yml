@@ -7,7 +7,7 @@ applications:
           commands:
             - nvm use 22
             - corepack enable
-            - corepack prepare pnpm@10.11.0 --activate
+            - corepack prepare pnpm@10.12.1 --activate
             - echo "Installing workspace dependencies from root"
             - cd ../.. && pnpm install --frozen-lockfile --prefer-offline
         build:
@@ -20,7 +20,7 @@ applications:
           commands:
             - nvm use 22
             - corepack enable
-            - corepack prepare pnpm@10.11.0 --activate
+            - corepack prepare pnpm@10.12.1 --activate
             - echo "Installing workspace dependencies from root"
             - cd ../.. && pnpm install --frozen-lockfile --prefer-offline
         build:

@@ -13,7 +13,7 @@ export const auth = defineAuth({
     },
   },
   // User pool groups used throughout the app for authorization
-  groups: ["admin", "teamLead"],
+  groups: ["admin", "teamLead", "partnerAdmin"],
   userAttributes: {
     // Standard attributes
     email: {

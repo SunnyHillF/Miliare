@@ -168,6 +168,15 @@ npx ampx pipeline-deploy --branch main --app-id <your-app-id>
 - Partner data seeding for 7 strategic partners
 - End-to-end testing of complete user flows
 
+### Production Iteration Notes
+
+**Features Excluded from Initial Production Release:**
+- ❌ **1099-NEC Tax Forms**: Tax document generation and management deferred to future iteration
+- ❌ **DocuSign Integration**: Electronic signature workflows not required for initial launch
+- ❌ **Direct Deposit Setup**: Bank account information collection and payment processing deferred
+
+*Note: These features were originally planned but have been removed from the current production scope to expedite the initial platform launch. They may be considered for future iterations based on user feedback and business requirements.*
+
 ### Phase 2: Production Backend (Future)
 - Custom CDK backend implementation
 - Go Lambda functions for complex business logic

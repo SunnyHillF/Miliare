@@ -9,23 +9,34 @@ import ReferPage from './pages/dashboard/ReferPage';
 import PartnerDetailPage from './pages/dashboard/PartnerDetailPage';
 import TeamPage from './pages/dashboard/TeamPage';
 import AdminPage from './pages/dashboard/AdminPage';
+import CompanyAdminPage from './pages/dashboard/CompanyAdminPage';
 import VerifyEmailPage from './pages/VerifyEmailPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import { Toaster } from './components/ui/Toaster';
 
 // Protected route component
-const ProtectedRoute = ({ children, requiredGroup }: { children: React.ReactNode; requiredGroup?: string }) => {
+const ProtectedRoute = ({ 
+  children, 
+  requiredGroup, 
+  requiredGroups 
+}: { 
+  children: React.ReactNode; 
+  requiredGroup?: string;
+  requiredGroups?: string[];
+}) => {
   const { isAuthenticated, user } = useAuth();
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 
-  if (
-    requiredGroup &&
-    !user?.groups?.includes(requiredGroup) &&
-    !user?.groups?.includes('admin')
-  ) {
+  // Check if user has required group access
+  if (requiredGroup && !user?.groups?.includes(requiredGroup) && !user?.groups?.includes('admin')) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  // Check if user has any of the required groups access
+  if (requiredGroups && !requiredGroups.some(group => user?.groups?.includes(group)) && !user?.groups?.includes('admin')) {
     return <Navigate to="/dashboard" replace />;
   }
 
@@ -54,6 +65,11 @@ function App() {
           <Route path="team" element={
             <ProtectedRoute requiredGroup="teamLead">
               <TeamPage />
+            </ProtectedRoute>
+          } />
+          <Route path="company-admin" element={
+            <ProtectedRoute requiredGroups={["partnerAdmin"]}>
+              <CompanyAdminPage />
             </ProtectedRoute>
           } />
           <Route path="admin" element={
