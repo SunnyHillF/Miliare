@@ -39,6 +39,12 @@ const EarningsChart: React.FC<EarningsChartProps> = ({ data }) => {
           borderColor: '#1e40af',
           backgroundColor: 'rgba(30, 64, 175, 0.2)',
           tension: 0.4,
+          borderWidth: 3,
+          pointBackgroundColor: '#1e40af',
+          pointBorderColor: '#ffffff',
+          pointBorderWidth: 2,
+          pointRadius: 6,
+          pointHoverRadius: 8,
         },
       ],
     }),
@@ -48,21 +54,63 @@ const EarningsChart: React.FC<EarningsChartProps> = ({ data }) => {
   const options = React.useMemo(
     () => ({
       responsive: true,
+      maintainAspectRatio: false,
+      interaction: {
+        intersect: false,
+        mode: 'index' as const,
+      },
       scales: {
+        x: {
+          grid: {
+            display: false,
+          },
+          ticks: {
+            font: {
+              size: 12,
+            },
+          },
+        },
         y: {
           beginAtZero: true,
+          grid: {
+            color: 'rgba(0, 0, 0, 0.1)',
+          },
+          ticks: {
+            font: {
+              size: 12,
+            },
+            callback: function(value: any) {
+              return '$' + value.toLocaleString();
+            },
+          },
         },
       },
       plugins: {
         legend: {
           display: false,
         },
+        tooltip: {
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          titleColor: '#ffffff',
+          bodyColor: '#ffffff',
+          borderColor: '#1e40af',
+          borderWidth: 1,
+          callbacks: {
+            label: function(context: any) {
+              return 'Earnings: $' + context.parsed.y.toLocaleString();
+            },
+          },
+        },
       },
     }),
     []
   );
 
-  return <Line data={chartData} options={options} />;
+  return (
+    <div className="w-full h-full">
+      <Line data={chartData} options={options} />
+    </div>
+  );
 };
 
 export default EarningsChart;
