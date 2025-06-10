@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 import EarningsChart, { EarningsPoint } from '../../components/EarningsChart';
 import PendingReferralsCard, { PendingReferral } from '../../components/PendingReferralsCard';
 import RecentPaymentsCard, { RecentPayment } from '../../components/RecentPaymentsCard';
+import StatsOverview, { StatItem } from '../../components/StatsOverview';
 
 const BusinessPage = () => {
   
@@ -63,6 +64,37 @@ const BusinessPage = () => {
 
   const chartData = earningsMap[period] || earningsData6Months;
 
+  const stats: StatItem[] = [
+    {
+      label: 'Total Earnings',
+      value: `$${totalEarnings.toLocaleString()}`,
+      icon: 'DollarSign',
+      bgColor: 'bg-blue-100',
+      iconColor: 'text-primary',
+    },
+    {
+      label: 'Pending Commissions',
+      value: `$${pendingCommissions.toLocaleString()}`,
+      icon: 'Clock',
+      bgColor: 'bg-green-100',
+      iconColor: 'text-success',
+    },
+    {
+      label: 'Total Referrals',
+      value: referralsCount.toString(),
+      icon: 'Users',
+      bgColor: 'bg-purple-100',
+      iconColor: 'text-purple-600',
+    },
+    {
+      label: 'Success Rate',
+      value: `${Math.round((successfulReferrals / referralsCount) * 100)}%`,
+      icon: 'TrendingUp',
+      bgColor: 'bg-orange-100',
+      iconColor: 'text-orange-600',
+    },
+  ];
+
   const handleViewAllReferrals = () => {
     console.log('Navigate to all referrals page');
   };
@@ -81,55 +113,7 @@ const BusinessPage = () => {
       </div>
       
       {/* Stats overview */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-          <div className="flex items-center">
-            <div className="p-3 rounded-full bg-blue-100 text-primary">
-              <DollarSign className="h-6 w-6" />
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">Total Earnings</p>
-              <p className="text-2xl font-semibold text-gray-900">${totalEarnings.toLocaleString()}</p>
-            </div>
-          </div>
-        </div>
-        
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-          <div className="flex items-center">
-            <div className="p-3 rounded-full bg-green-100 text-success">
-              <Clock className="h-6 w-6" />
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">Pending Commissions</p>
-              <p className="text-2xl font-semibold text-gray-900">${pendingCommissions.toLocaleString()}</p>
-            </div>
-          </div>
-        </div>
-        
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-          <div className="flex items-center">
-            <div className="p-3 rounded-full bg-purple-100 text-purple-600">
-              <Users className="h-6 w-6" />
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">Total Referrals</p>
-              <p className="text-2xl font-semibold text-gray-900">{referralsCount}</p>
-            </div>
-          </div>
-        </div>
-        
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-          <div className="flex items-center">
-            <div className="p-3 rounded-full bg-orange-100 text-orange-600">
-              <TrendingUp className="h-6 w-6" />
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">Success Rate</p>
-              <p className="text-2xl font-semibold text-gray-900">{Math.round((successfulReferrals / referralsCount) * 100)}%</p>
-            </div>
-          </div>
-        </div>
-      </div>
+      <StatsOverview stats={stats} />
       
       <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
         <div className="flex justify-between items-center mb-4">
