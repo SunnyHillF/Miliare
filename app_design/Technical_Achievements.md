@@ -22,7 +22,7 @@ applications:
         preBuild:
           commands:
             - corepack enable
-            - corepack prepare pnpm@10.11.0 --activate
+            - corepack prepare pnpm@10.12.1 --activate
             - pnpm install --frozen-lockfile
         build:
           commands:
@@ -63,7 +63,7 @@ cache:
 preBuild:
   commands:
     - corepack enable
-    - corepack prepare pnpm@10.11.0 --activate
+    - corepack prepare pnpm@10.12.1 --activate
     - pnpm install --frozen-lockfile
 ```
 
@@ -270,7 +270,7 @@ phases:
     commands:
       - node --version  # Verify runtime
       - corepack enable
-      - corepack prepare pnpm@10.11.0 --activate
+      - corepack prepare pnpm@10.12.1 --activate
 ```
 
 ## 📈 Performance & Scalability Improvements

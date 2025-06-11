@@ -24,7 +24,7 @@ point for the Amplify application. When planning new features or infrastructure,
 review these files first.
 
 ## Notes
-- This project uses Node 22+ and pnpm 10.11.1.
+ - This project uses Node 22+ and pnpm 10.12.1.
 - Backend design notes are tracked in the `app_design` directory.
 - Keep this guide current as the project evolves.
 

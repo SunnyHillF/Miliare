@@ -79,7 +79,7 @@ const EarningsChart: React.FC<EarningsChartProps> = ({ data }) => {
             font: {
               size: 12,
             },
-            callback: function(value: any) {
+            callback: function(value: number) {
               return '$' + value.toLocaleString();
             },
           },
@@ -96,7 +96,7 @@ const EarningsChart: React.FC<EarningsChartProps> = ({ data }) => {
           borderColor: '#1e40af',
           borderWidth: 1,
           callbacks: {
-            label: function(context: any) {
+            label: function(context: { parsed: { y: number } }) {
               return 'Earnings: $' + context.parsed.y.toLocaleString();
             },
           },

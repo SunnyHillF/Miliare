@@ -1,10 +1,4 @@
 import React, { useState } from 'react';
-import {
-  TrendingUp,
-  Clock,
-  DollarSign,
-  Users,
-} from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { Link } from 'react-router-dom';
 import EarningsChart, { EarningsPoint } from '../../components/EarningsChart';
